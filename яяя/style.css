@@ -1,0 +1,358 @@
+/* Подключение футуристичного шрифта */
+@import url('https://googleapis.com');
+
+:root {
+    --neon-blue: #00f3ff;
+    --neon-gold: #ffcc00;
+    --neon-green: #00ff66;
+    --q7-black: #0f0f11;
+    --bg-dark: #0a0a0c;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Orbitron', sans-serif;
+    color: white;
+    overflow: hidden;
+}
+
+#gameContainer {
+    position: relative;
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(circle, #1a1a1c 0%, #050505 100%);
+    border: 3px solid #333;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+#gameArea {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Приборная панель */
+.dashboard {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid var(--neon-blue);
+    pointer-events: none;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+}
+
+.stat-item {
+    font-size: 12px;
+    margin: 5px 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.stat-item span {
+    color: var(--neon-blue);
+    font-weight: bold;
+}
+
+/* Парковочное место */
+#parkingSlot {
+    position: absolute;
+    width: 50px; 
+    height: 90px;
+    border: 2px dashed var(--neon-gold);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    z-index: 10;
+}
+
+.slot-text {
+    font-size: 8px;
+    color: var(--neon-gold);
+    text-align: center;
+    font-weight: 900;
+}
+
+/* Машины (Игрок и Трафик) */
+#car, .car-model {
+    position: absolute;
+    width: 40px; 
+    height: 80px;
+    z-index: 50;
+    will-change: transform, left, top;
+}
+
+.q7-body, .car-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* Цвета корпусов */
+.q7-body { background: linear-gradient(145deg, #222, #000); }
+.obs-silver .car-body { background: linear-gradient(145deg, #999, #444); }
+.obs-blue .car-body   { background: linear-gradient(145deg, #002266, #000); }
+.obs-white .car-body  { background: linear-gradient(145deg, #eee, #999); }
+.obs-red .car-body    { background: linear-gradient(145deg, #900, #200); }
+
+/* Детализация */
+.glass, .car-glass {
+    width: 75%;
+    height: 28%;
+    background: linear-gradient(to bottom, #111, #000);
+    margin: 22% auto 0;
+    border-radius: 4px;
+    border: 1px solid #222;
+}
+
+.lights-front, .car-lights-front {
+    position: absolute;
+    top: 2px; width: 100%; display: flex;
+    justify-content: space-between; padding: 0 4px; box-sizing: border-box;
+}
+.lights-front::before, .lights-front::after, 
+.car-lights-front::before, .car-lights-front::after {
+    content: ''; width: 8px; height: 3px; background: #fff;
+    border-radius: 1px; box-shadow: 0 0 8px #fff;
+}
+
+.lights-rear, .car-lights-rear {
+    position: absolute;
+    bottom: 2px; width: 100%; display: flex;
+    justify-content: space-between; padding: 0 4px; box-sizing: border-box;
+}
+.lights-rear::before, .lights-rear::after,
+.car-lights-rear::before, .car-lights-rear::after {
+    content: ''; width: 10px; height: 3px; background: #f00; border-radius: 1px;
+}
+
+/* ЭФФЕКТ ДРИФТА: СИНИЙ ДЫМ */
+.smoke {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: rgba(0, 243, 255, 0.3);
+    filter: blur(6px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 40;
+    animation: smokeFade 0.7s ease-out forwards;
+}
+
+@keyframes smokeFade {
+    0% { transform: scale(0.5); opacity: 0.8; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
+/* Столкновение */
+.collision {
+    animation: shake 0.1s infinite;
+}
+@keyframes shake {
+    0% { transform: translate(1px, 1px); }
+    50% { transform: translate(-1px, -1px); }
+    100% { transform: translate(1px, 1px); }
+}
+
+/* Меню */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.glitch-text {
+    font-size: 50px;
+    font-weight: 900;
+    color: var(--neon-blue);
+    text-shadow: 3px 3px var(--neon-gold);
+    margin: 0;
+}
+
+.controls-hint {
+    margin: 20px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+button {
+    padding: 15px 50px;
+    background: var(--neon-blue);
+    border: none;
+    font-family: 'Orbitron';
+    font-weight: 900;
+    color: #000;
+    cursor: pointer;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background: var(--neon-green);
+    box-shadow: 0 0 20px var(--neon-green);
+}
+/* Контейнер мобильного управления */
+.mobile-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 150;
+    pointer-events: none;
+}
+
+/* ЛЕВАЯ СТОРОНА: РУЛЬ */
+.steering-zone {
+    pointer-events: auto;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#steeringWheel {
+    width: 130px;
+    height: 130px;
+    border: 6px solid #222;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,0,0,0.6) 30%, rgba(15,15,17,0.9) 100%);
+    box-shadow: 0 0 0 3px var(--neon-blue), inset 0 0 15px rgba(0,243,255,0.3);
+    position: relative;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    will-change: transform;
+    transition: transform 0.1s ease-out;
+}
+
+#steeringWheel:active { cursor: grabbing; }
+
+/* Спицы и центр руля */
+.wheel-center {
+    position: absolute;
+    inset: 35px;
+    background: #111;
+    border: 2px solid #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--neon-blue);
+    letter-spacing: 1px;
+}
+
+.wheel-line {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 6px;
+    background: #222;
+    transform: translateY(-50%);
+}
+.wheel-line::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 6px;
+    background: #222;
+    transform: translateX(-50%);
+}
+
+/* ПРАВАЯ СТОРОНА: ПЕДАЛИ */
+.pedals-zone {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    height: 140px;
+}
+
+.pedal {
+    background: #151518;
+    border: 2px solid #333;
+    border-radius: 6px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+    box-shadow: 0 8px 0 #000, 0 10px 15px rgba(0,0,0,0.5);
+    transition: all 0.05s ease;
+}
+
+/* Анимация нажатия педали в пол */
+.pedal:active {
+    transform: translateY(6px);
+    box-shadow: 0 2px 0 #000, 0 5px 5px rgba(0,0,0,0.3);
+}
+
+.pedal span {
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+/* Рифленая текстура педалей */
+.pedal-texture {
+    position: absolute;
+    inset: 5px;
+    border-radius: 3px;
+    background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 50%);
+    background-size: 100% 6px;
+    opacity: 0.3;
+}
+
+/* Специфика педали ТОРМОЗА (Широкая, Красная) */
+.pedal-brake {
+    width: 80px;
+    height: 100px;
+    border-color: #ff3333;
+    color: #ff3333;
+}
+.pedal-brake:active {
+    background: rgba(255, 51, 51, 0.15);
+    box-shadow: 0 2px 0 #000, 0 0 15px rgba(255, 51, 51, 0.4);
+}
+
+/* Специфика педали ГАЗА (Узкая, Длинная, Зеленая) */
+.pedal-gas {
+    width: 50px;
+    height: 130px;
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+}
+.pedal-gas:active {
+    background: rgba(0, 255, 102, 0.15);
+    box-shadow: 0 2px 0 #000, 0 0 15px rgba(0, 255, 102, 0.4);
+}
